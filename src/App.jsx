@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { useRef, useState } from "react";
 import "./css/App.css";
@@ -25,11 +26,12 @@ const App = () => {
     passwordErr = useRef();
 
   let [formData, setFormData] = useState({
-    fname: "",
-    lname: "",
+    fName: "",
+    lName: "",
     email: "",
     password: "",
   });
+  const formDataObj = formData;
   const [confirmationMessage, setConfirmationMessage] = useState("");
   let [popUp, setPopUp] = useState("hidePopUp");
   // show error
@@ -44,12 +46,6 @@ const App = () => {
     error.innerHTML = ``;
     error.style = null;
     Object.assign(name.style, successMessageStyle);
-    setFormData((prevObject) => {
-      return {
-        ...prevObject,
-        [name.name]: name.value,
-      };
-    });
   };
 
   // check name is not empty
@@ -93,12 +89,14 @@ const App = () => {
     }
   };
 
-  const clearInputField = () => {
-    fName.value = "";
-    lName.value = "";
-    Email.value = "";
-    password.value = "";
+  // onIput changes
+  const inputOnChange = (name, value) => {
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
+
   const formSubmit = (event) => {
     event.preventDefault();
     checkName(fName, fNameErr, "Frist Name is required", event);
@@ -122,12 +120,43 @@ const App = () => {
     } else {
       setConfirmationMessage(""); // Clear success message if validation fails
     }
+
+    console.log(formDataObj);
   };
 
+  //api data 
+  const data = {
+    fName: "MG",
+    lName: "Rahul",
+    email: "mgrahul639@gmail.com",
+    password: "1234",
+  };
+
+  const updatedata = () => {
+    setFormData((prevObject) => {
+      return {
+        ...prevObject,
+        fName: data.fName,
+        lName: data.lName,
+        email: data.email,
+        password: data.password,
+      };
+    });
+  };
   const closePopUp = (e) => {
     setPopUp("hidePopUp");
-    clearInputField();
+    setFormData((prevObject) => {
+      return {
+        ...prevObject,
+        fName: "",
+        lName: "",
+        email: "",
+        password: "",
+      };
+    });
+    console.log(formDataObj);
   };
+
   return (
     <>
       <form action="#" method="post" onSubmit={formSubmit}>
@@ -138,6 +167,8 @@ const App = () => {
             type="text"
             name="fname"
             id="fname"
+            onChange={(e) => inputOnChange("fName", e.target.value)}
+            value={formData.fName}
           />{" "}
           <br />
           <span ref={(fname) => (fNameErr = fname)}></span>
@@ -150,6 +181,8 @@ const App = () => {
             type="text"
             name="lname"
             id="lname"
+            onChange={(e) => inputOnChange("lName", e.target.value)}
+            value={formData.lName}
           />{" "}
           <br />
           <span ref={(lname) => (lNameErr = lname)}></span>
@@ -162,6 +195,8 @@ const App = () => {
             type="email"
             name="email"
             id="email"
+            onChange={(e) => inputOnChange("email", e.target.value)}
+            value={formData.email}
           />{" "}
           <br />
           <span ref={(email) => (emailErr = email)}></span>
@@ -174,6 +209,8 @@ const App = () => {
             type="password"
             name="password"
             id="password"
+            onChange={(e) => inputOnChange("password", e.target.value)}
+            value={formData.password}
           />{" "}
           <br />
           <span ref={(password) => (passwordErr = password)}></span>
@@ -181,6 +218,7 @@ const App = () => {
         <br />
         <button>Submit</button>
       </form>
+      <button onClick={updatedata}>Update</button>
       {confirmationMessage && (
         <>
           <div className="popUpBox" id={popUp}>
@@ -191,7 +229,7 @@ const App = () => {
               OK
             </button>
           </div>
-          <FormInputValue data={formData} />
+          <FormInputValue data={formDataObj} />
         </>
       )}
     </>

@@ -8,8 +8,8 @@ const FormInputValue = (props) => {
     <>
       <div>
         <h2>Form Data:</h2>
-        <p>First Name: {props.data.fname}</p>
-        <p>Last Name: {props.data.lname}</p>
+        <p>First Name: {props.data.fName}</p>
+        <p>Last Name: {props.data.lName}</p>
         <p>Email: {props.data.email}</p>
         <p>Password: {props.data.password}</p>
       </div>
